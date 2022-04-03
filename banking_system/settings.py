@@ -25,7 +25,7 @@ SECRET_KEY = 'po0172$69b@78ps4v^uhfxu6q--8ko7kpp7rbz420s_3w#sir%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*','13.250.22.111','www.cloudproj.me','cloud-bank-loadbalancer-1027541376.ap-southeast-1.elb.amazonaws.com']
 
 
 # Application definition
@@ -80,10 +80,20 @@ WSGI_APPLICATION = 'banking_system.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'cloudbank',
+        'USER': 'postgres',
+        'PASSWORD': 'cloudbank',
+        'HOST': 'cloudbank2-db.cju4voxxx3nk.ap-southeast-1.rds.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
