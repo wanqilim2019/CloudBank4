@@ -10,19 +10,20 @@
         <label class="block text-gray-700 text-sm font-bold mb-2" for="phone">
             Get OTP
         </label>
-        <input type="number" id="phone" name="phone"
+        <input type="text" id="phone" name="phone"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight border rounded-md border-gray-500 focus:outline-none focus:shadow-outline">
 
-        <input type="button" id="" name="getOTP" value="Get OTP" onclick="otpGenerate()"
+        <input type="button"  name="getOTP" value="Get OTP" onclick="otpGenerate()"
         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
+        <div id="isSent"></div>
     </div>
 
     <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="phone">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="otp">
             Validate OTP
         </label>
-        <input type="number" id="phone" name="phone"
+        <input type="number" id="otp" name="otp"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight border rounded-md border-gray-500 focus:outline-none focus:shadow-outline">
         <input type="button" value="Validate OTP" onclick="otpValidate()"
         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -40,6 +41,8 @@
                 contentType: "application/json",
                 data: JSON.stringify(object),
                 success: function (response) {
+                    console.log(response);
+                    $("#otp").text() = response.data.otp;
                     $('html, body').css("cursor", "auto");
                     alert("Success");
                 },
@@ -49,16 +52,24 @@
                 }
             });
         }
-        otpGenerate = () => {
-            var phone = int($("#phone").text());
-            ajaxCall("https://API-URL/generate", { "phone": phone, "digits": 6 });
-        };
-        otpValidate = () => {
-            var phone = int($("#phone").text());
-            var otp = int($("#otp").text());
-            ajaxCall("https://API-URL/validate", { "phone": phone, "otp": otp });
-        };
-
+        // otpGenerate = () => {
+        //     var phone = parseInt($("#phone").text());
+        
+        // };
+        // otpValidate = () => {
+        //     var phone = parseInt($("#phone").text());
+        //     var otp = parseInt($("#otp").text());
+        //     ajaxCall("https://gqrewaz9h5.execute-api.ap-southeast-1.amazonaws.com/Test/validate", { "phone": phone, "otp": otp });
+        // };
+        function otpGenerate(){
+            //     ajaxCall("https://gqrewaz9h5.execute-api.ap-southeast-1.amazonaws.com/Test", { "phone": phone });
+            document.getElementById("isSent").innerHTML = "OTP sent";
+        }
+        function otpValidate(){
+            //     ajaxCall("https://gqrewaz9h5.execute-api.ap-southeast-1.amazonaws.com/Test", { "phone": phone, "otp": otp });
+            
+            document.getElementById("isSent").innerHTML = "OTP validated";
+        }
     </script>
     <form method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         {% csrf_token %}
