@@ -35,7 +35,7 @@
         <div id="otpsection">
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="phone">
-                    Get OTP
+                    Please input your phone number. Please include the country code (eg. +65)
                 </label>
                 <input type="text" id="phone" name="phone"
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight border rounded-md border-gray-500 focus:outline-none focus:shadow-outline">
@@ -58,66 +58,135 @@
             </div>
         </div>
     </form>
-        <script src="https://code.jquery.com/jquery-3.5.0.min.js"
-            integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
-        <script>
-            function displayOTP() {
-                $('#otpsection').show();
-            }
-            ajaxCall = (url, object) => {
-                $('html, body').css("cursor", "wait");
-                $.ajax({
-                    type: "POST",
-                    crossDomail: false,
-                    url: url,
-                    contentType: "application/json",
-                    data: JSON.stringify(object),
-                    success: function (response) {
-                        console.log(response);
-                        $("#otp").text() = response.data.otp;
-                        $('html, body').css("cursor", "auto");
-                        alert("Success");
-                    },
-                    error: function () {
-                        $('html, body').css("cursor", "auto");
-                        alert("Failure");
-                    }
-                });
-            }
-            // otpGenerate = () => {
-            //     var phone = parseInt($("#phone").text());
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js"
+        integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+    <script>
+        function displayOTP() {
+            $('#otpsection').show();
+        }
+        // ajaxCall = (url, object) => {
+        //     $('html, body').css("cursor", "wait");
+        //     $.ajax({
+        //         type: "POST",
+        //         crossDomail: false,
+        //         url: url,
+        //         contentType: "application/json",
+        //         data: JSON.stringify(object),
+        //         success: function (response) {
+        //             console.log(response);
+        //             $("#otp").text() = response.data.otp;
+        //             $('html, body').css("cursor", "auto");
+        //             alert("Success");
+        //         },
+        //         error: function () {
+        //             $('html, body').css("cursor", "auto");
+        //             alert("Failure");
+        //         }
+        //     });
+        // }
 
-            // };
-            // otpValidate = () => {
-            //     var phone = parseInt($("#phone").text());
-            //     var otp = parseInt($("#otp").text());
-            //     ajaxCall("https://gqrewaz9h5.execute-api.ap-southeast-1.amazonaws.com/Test/validate", { "phone": phone, "otp": otp });
-            // };
-            function otpGenerate() {
-                //     ajaxCall("https://gqrewaz9h5.execute-api.ap-southeast-1.amazonaws.com/Test", { "phone": phone });
-                document.getElementById("isSent").innerHTML = "OTP sent";
-                document.getElementById("phone").value = "";
-            }
-            function otpValidate() {
-                //     ajaxCall("https://gqrewaz9h5.execute-api.ap-southeast-1.amazonaws.com/Test", { "phone": phone, "otp": otp });
-                var otp = document.getElementById("otp").value;
-                if (otp == 138572) {
+
+        function otpGenerate() {
+            //     ajaxCall("https://gqrewaz9h5.execute-api.ap-southeast-1.amazonaws.com/Test", { "phone": phone });
+            var phone = document.getElementById("phone").value;
+            var object = {
+                "phone": phone
+            };
+            $.ajax({
+                type: "POST",
+                crossDomail: false,
+                url: "https://gqrewaz9h5.execute-api.ap-southeast-1.amazonaws.com/Test",
+                contentType: "application/json",
+                data: JSON.stringify(object),
+                success: function (response) {
+                    console.log(response);
+                    $('html, body').css("cursor", "auto");
+                    // alert("Success");
+                    document.getElementById("isSent").innerHTML = "OTP sent";
+
+
+                },
+                error: function () {
+                    $('html, body').css("cursor", "auto");
+                    document.getElementById("phone").value = "";
+                    alert("Failure to send OTP.Please try again in a minute");
+                }
+            });
+
+        }
+        function otpValidate() {
+            var otp = document.getElementById("otp").value;
+            var phone = document.getElementById("phone").value;
+
+            var object = {
+                "phone": phone,
+                "otp": otp
+            };
+            $.ajax({
+                type: "POST",
+                crossDomail: false,
+                url: "https://gqrewaz9h5.execute-api.ap-southeast-1.amazonaws.com/Test/validate",
+                contentType: "application/json",
+                data: JSON.stringify(object),
+                success: function (response) {
+                    console.log(response);
+                    $('html, body').css("cursor", "auto");
+                    // alert("Success");
                     document.getElementById("isValidated").innerHTML = "OTP validated";
                     document.getElementById("otp").value = "";
-                    
+
                     confirm("A SMS notification of successful transaction has been sent to your phone");
                     sendConfirmation();
-                } else {
+
+                },
+                error: function () {
+                    $('html, body').css("cursor", "auto");
+                    alert("Failure to validate OTP.Please try again ");
                     document.getElementById("isValidated").innerHTML = "OTP invalid";
+
                 }
-            }
-            function sendConfirmation() {
-                //     var phone = parseInt($("#phone").text());
-                //     var otp = parseInt($("#otp").text());
-                //     ajaxCall("https://gqrewaz9h5.execute-api.ap-southeast-1.amazonaws.com/Test/validate", { "phone": phone, "otp": otp });
-                console.log("send confirmation");
-            }
-        </script>
-    
+            });
+
+
+
+            // "https://gqrewaz9h5.execute-api.ap-southeast-1.amazonaws.com/Test/validate", { "phone": phone, "otp": otp }
+            // if (otp == 138572) {
+            //     document.getElementById("isValidated").innerHTML = "OTP validated";
+            //     document.getElementById("otp").value = "";
+
+            //     confirm("A SMS notification of successful transaction has been sent to your phone");
+            //     sendConfirmation();
+            // } else {
+            //     document.getElementById("isValidated").innerHTML = "OTP invalid";
+            // }
+        }
+        function sendConfirmation() {
+            var phone = document.getElementById("phone").value;
+            var object = {
+                "phone": phone
+            };
+            console.log("send confirmation");
+            $.ajax({
+                type: "POST",
+                crossDomail: false,
+                url: "https://gqrewaz9h5.execute-api.ap-southeast-1.amazonaws.com/Test2",
+                contentType: "application/json",
+                data: JSON.stringify(object),
+                success: function (response) {
+                    console.log(response);
+                    $('html, body').css("cursor", "auto");
+                    // alert("Success");
+                    
+
+                },
+                error: function () {
+                    $('html, body').css("cursor", "auto");
+                    console.log("failure");
+
+                }
+            });
+        }
+    </script>
+
 </div>
 {% endblock %}
